@@ -1,22 +1,35 @@
-import { useState } from 'react'
-import './App.css'          // or './index.css' if you moved styles there
-import './index.css'        // ← make sure this is imported if styles are in index.css
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Navbar from './components/layout/Navbar';
+import Footer from './components/layout/Footer';
+
+// Pages
+import Home from './pages/Home';
+import About from './pages/About';
+import Blog from './pages/Blog';
+import Speaking from './pages/Speaking';
+import Contact from './pages/Contact';
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <div className="bg-green-600 text-white p-10 text-3xl font-bold text-center">
-      Tailwind is working! Hello Dr. Yetunde's site 🚀
-      <p>Count: {count}</p>
-      <button 
-        className="mt-4 px-6 py-3 bg-white text-green-600 rounded hover:bg-gray-100"
-        onClick={() => setCount(count + 1)}
-      >
-        Click me
-      </button>
-    </div>
-  )
+    <Router>
+      <div className="min-h-screen flex flex-col bg-gray-50">
+        <Navbar />
+
+        <main className="flex-grow">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/blog" element={<Blog />} />
+            <Route path="/speaking" element={<Speaking />} />
+            <Route path="/contact" element={<Contact />} />
+            {/* Later: <Route path="/blog/:id"  element={<BlogPost />} /> */}
+          </Routes>
+        </main>
+
+        <Footer />
+      </div>
+    </Router>
+  );
 }
 
-export default App
+export default App;
