@@ -1,3 +1,5 @@
+import dyImage from '../assets/dy.jpg';
+
 export default function Home() {
     return (
         <div className="py-16 px-4">
@@ -10,9 +12,13 @@ export default function Home() {
                     Senior Veterinary Officer, NCDC | One Health & Lassa Fever Expert
                 </p>
                 <div className="bg-white shadow-lg rounded-lg p-8 max-w-2xl mx-auto">
-                    <p className="text-lg text-gray-600">
-                        {/* Hero image placeholder */}
-                        [Professional headshot / hero image goes here]
+                    <img 
+                        src={dyImage}
+                        alt="Dr. Yetunde Abioye"
+                        className="w-48 h-48 md:w-64 md:h-64 mx-auto rounded-full object-cover border-4 border-green-800 shadow-md mb-4"
+                    />
+                    <p className="text-lg text-gray-600 italic">
+                        Leading the charge in One Health and infectious disease control
                     </p>
                 </div>
             </div>
