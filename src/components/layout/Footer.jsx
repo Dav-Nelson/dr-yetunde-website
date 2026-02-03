@@ -41,14 +41,14 @@ export default function Footer() {
                             </a>
                         </div>
                         <p className="text-sm">
-                            Email: <a href="mailto:babyabioyebitcada@gmail.com" className="hover:text-green-400">babyabioyebitcada@gmail.com</a>
+                            Email: <a href="mailto:babyabioyebitcada@gmail.com" className="hover:text-green-400">babyabioyebitcada@gmail.com</a> <br />
                             WhatsApp: <a href="https://wa.me/2348030969306" className="hover:text-green-400">+234 803 096 9306</a>
                         </p>
                     </div>
                 </div>
 
                 <div className="mt-8 pt-8 border-t border-gray-700 text-center text-sm">
-                    &copy © {new Date().getFullYear()} Dr. Yetunde Abioye. All rights reserved.
+                    © {new Date().getFullYear()} Dr. Yetunde Abioye. All rights reserved.
                 </div>
             </div>
         </footer>
