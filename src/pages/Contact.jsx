@@ -18,7 +18,7 @@ export default function Home() {
                         </a>
                     </div>
                     <p className="text-sm">
-                        Email: <a href="mailto:yetundeabioye@gmail.com" className="hover:text-green-400">yetundeabioye@gmail.com</a>
+                        Email: <a href="mailto:babyabioyebitcada@gmail.com" className="hover:text-green-400">babyabioyebitcada@gmail.com</a>
                         WhatsApp: <a href="https://wa.me/2348030969306" className="hover:text-green-400">+234 803 096 9306</a>
                     </p>
                 </div>

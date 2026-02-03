@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
+import LoginTest from './pages/LoginTest';
 
 // Pages
 import Home from './pages/Home';
@@ -22,6 +23,7 @@ function App() {
             <Route path="/blog" element={<Blog />} />
             <Route path="/speaking" element={<Speaking />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/login-test" element={<LoginTest />} />
             {/* Later: <Route path="/blog/:id"  element={<BlogPost />} /> */}
           </Routes>
         </main>
