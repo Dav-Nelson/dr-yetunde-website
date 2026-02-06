@@ -3,6 +3,12 @@ import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 import LoginTest from './pages/LoginTest';
 
+// Admin
+import AdminLayout from './components/layout/AdminLayout';
+import AdminDashboard from './pages/admin/Dashboard';
+import BlogManagement from './pages/admin/BlogManagement';
+
+
 // Pages
 import Home from './pages/Home';
 import About from './pages/About';
@@ -24,7 +30,13 @@ function App() {
             <Route path="/speaking" element={<Speaking />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/login-test" element={<LoginTest />} />
-            {/* Later: <Route path="/blog/:id"  element={<BlogPost />} /> */}
+            <Route element={<AdminLayout />} />
+              <Route path="/admin" element={<AdminDashboard />} />
+              <Route path="/admin/blog" element={<BlogManagement />} />
+              {/* Later:
+                <Route path="/admin/blog" element={<AdminDashboard />} />
+                <Route path="/admin/speaking" element={<AdminSpeaking />} />
+              */}
           </Routes>
         </main>
 
