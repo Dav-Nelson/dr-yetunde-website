@@ -74,7 +74,13 @@ export default function Blog() {
 
                 <div className="p-8">
                   <div className="flex items-center text-sm text-gray-500 mb-4">
-                    <time dateTime={post.date}>{post.date}</time>
+                      <time dateTime={post.date}>
+                        {new Date(post.date).toLocaleDateString('en-GB', {
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric'
+                        })}
+                      </time>
                   </div>
 
                   <h2 className="text-2xl font-bold text-green-800 mb-4">
