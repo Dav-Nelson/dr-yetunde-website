@@ -94,10 +94,10 @@ export default function Footer() {
               <div>
                 <span className="font-medium text-gray-400">Email:</span>{' '}
                 <a
-                  href="mailto:babyabioyebitcada@gmail.com"
+                  href="mailto:abioyeyetunde.ay@gmail.com"
                   className="text-green-400 hover:text-green-300 transition-colors"
                 >
-                  babyabioyebitcada@gmail.com
+                  abioyeyetunde.ay@gmail.com
                 </a>
               </div>
               <div>
