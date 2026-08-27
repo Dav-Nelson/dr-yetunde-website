@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { collection, getDocs, query, orderBy } from 'firebase/firestore';
 import { db } from '../firebase';
-import { Link } from 'react-router-dom'; // for future "Read more" links
 
 export default function Speaking() {
   const [events, setEvents] = useState([]);
@@ -109,14 +108,6 @@ export default function Speaking() {
                   <p className="text-gray-800 leading-relaxed flex-grow">
                     {event.description}
                   </p>
-
-                  {/* Future single-event link */}
-                  <Link
-                    to={`/speaking/${event.id}`} // placeholder for future single-event page
-                    className="mt-6 inline-flex items-center text-green-700 hover:text-green-900 font-medium transition-colors"
-                  >
-                    View details →
-                  </Link>
                 </div>
               </article>
             ))}
