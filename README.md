@@ -1,16 +1,40 @@
-# React + Vite
+# Dr. Yetunde Abioye — Official Website
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Personal and professional website for Dr. Yetunde Abioye — Veterinary Doctor, Incident Manager for the National Lassa Fever EOC, and Lead of the One Health Coordination Unit at the Nigeria Centre for Disease Control and Prevention (NCDC).
 
-Currently, two official plugins are available:
+**Live site:** [yourdomain.com](https://yourdomain.com) <!-- update once domain is live -->
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## About
 
-## React Compiler
+This site showcases Dr. Abioye's professional background, speaking engagements, and insights on One Health, public health security, and zoonotic disease work. It includes a content management system so posts and events can be added without touching code.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Tech Stack
 
-## Expanding the ESLint configuration
+- **React** + **Vite** — frontend framework and build tool
+- **Tailwind CSS** — styling
+- **React Router** — client-side routing
+- **Firebase** — Authentication (admin login) and Firestore (blog posts, speaking engagements)
+- **Cloudinary** — image hosting for uploaded content
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Features
+
+- Home, About, Blog, Speaking, and Contact pages
+- Admin dashboard (protected route) for managing blog posts and speaking engagements — full create, read, update, delete
+- Individual blog post pages with dedicated URLs
+- Responsive design across mobile, tablet, and desktop
+- SEO metadata and structured data (schema.org) for search and AI discoverability
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js (v18+ recommended)
+- A Firebase project with Authentication and Firestore enabled
+- A Cloudinary account for image uploads
+
+### Installation
+
+```bash
+git clone <repo-url>
+cd dr-yetunde-website
+npm install
