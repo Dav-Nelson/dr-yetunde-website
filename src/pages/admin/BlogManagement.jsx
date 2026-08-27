@@ -1,60 +1,23 @@
 import { useState, useEffect } from 'react';
-import { collection, addDoc, getDocs, deleteDoc, doc, query, orderBy } from 'firebase/firestore';
+import { collection, addDoc, updateDoc, getDocs, deleteDoc, doc, query, orderBy } from 'firebase/firestore';
 import { db } from '../../firebase';
 import { uploadToCloudinary } from '../../utils/cloudinaryUpload';
 
 export default function BlogManagement() {
   const [posts, setPosts] = useState([]);
+  const [editingId, setEditingId] = useState(null);
   const [title, setTitle] = useState('');
   const [excerpt, setExcerpt] = useState('');
   const [content, setContent] = useState('');
   const [date, setDate] = useState('');
   const [imageFile, setImageFile] = useState(null);
+  const [existingImageUrl, setExistingImageUrl] = useState('');
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
-  // Fetch posts (sorted by date descending)
-  useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        const q = query(collection(db, 'blogPosts'), orderBy('date', 'desc'));
-        const querySnapshot = await getDocs(q);
-        const postsData = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        setPosts(postsData);
-      } catch (err) {
-        setError('Failed to load posts');
-      }
-    };
-    fetchPosts();
-  }, []);
-
-  const handleCreatePost = async (e) => {
-    e.preventDefault();
-    setUploading(true);
-    setError('');
-    setSuccess('');
-
+  const fetchPosts = async () => {
     try {
-      let imageUrl = '';
-      if (imageFile) {
-        const result = await uploadToCloudinary(imageFile);
-        imageUrl = result.url;
-      }
-
-      await addDoc(collection(db, 'blogPosts'), {
-        title,
-        excerpt,
-        content,
-        date,
-        featuredImageUrl: imageUrl,
-        createdAt: new Date().toISOString(),
-      });
-
-      // Refresh list
       const q = query(collection(db, 'blogPosts'), orderBy('date', 'desc'));
       const querySnapshot = await getDocs(q);
       const postsData = querySnapshot.docs.map((doc) => ({
@@ -62,17 +25,74 @@ export default function BlogManagement() {
         ...doc.data(),
       }));
       setPosts(postsData);
-
-      // Clear form
-      setTitle('');
-      setExcerpt('');
-      setContent('');
-      setDate('');
-      setImageFile(null);
-
-      setSuccess('Blog post created successfully!');
     } catch (err) {
-      setError(err.message || 'Failed to create post');
+      setError('Failed to load posts');
+    }
+  };
+
+  useEffect(() => {
+    fetchPosts();
+  }, []);
+
+  const resetForm = () => {
+    setEditingId(null);
+    setTitle('');
+    setExcerpt('');
+    setContent('');
+    setDate('');
+    setImageFile(null);
+    setExistingImageUrl('');
+  };
+
+  const handleEditClick = (post) => {
+    setEditingId(post.id);
+    setTitle(post.title);
+    setExcerpt(post.excerpt || '');
+    setContent(post.content);
+    setDate(post.date);
+    setExistingImageUrl(post.featuredImageUrl || '');
+    setImageFile(null);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setUploading(true);
+    setError('');
+    setSuccess('');
+
+    try {
+      let imageUrl = existingImageUrl;
+      if (imageFile) {
+        const result = await uploadToCloudinary(imageFile);
+        imageUrl = result.url;
+      }
+
+      if (editingId) {
+        await updateDoc(doc(db, 'blogPosts', editingId), {
+          title,
+          excerpt,
+          content,
+          date,
+          featuredImageUrl: imageUrl,
+        });
+        setSuccess('Blog post updated successfully!');
+      } else {
+        await addDoc(collection(db, 'blogPosts'), {
+          title,
+          excerpt,
+          content,
+          date,
+          featuredImageUrl: imageUrl,
+          createdAt: new Date().toISOString(),
+        });
+        setSuccess('Blog post created successfully!');
+      }
+
+      await fetchPosts();
+      resetForm();
+    } catch (err) {
+      setError(err.message || 'Failed to save post');
     } finally {
       setUploading(false);
     }
@@ -85,6 +105,7 @@ export default function BlogManagement() {
       await deleteDoc(doc(db, 'blogPosts', postId));
       setPosts(posts.filter((p) => p.id !== postId));
       setSuccess('Post deleted successfully');
+      if (editingId === postId) resetForm();
     } catch (err) {
       setError('Failed to delete post');
     }
@@ -97,7 +118,6 @@ export default function BlogManagement() {
           Manage Blog Posts
         </h2>
 
-        {/* Success / Error Messages */}
         {success && (
           <div className="mb-8 p-4 bg-green-100 border border-green-300 text-green-800 rounded-xl shadow-sm">
             {success}
@@ -109,8 +129,22 @@ export default function BlogManagement() {
           </div>
         )}
 
-        {/* Create Post Form */}
-        <form onSubmit={handleCreatePost} className="bg-white p-6 sm:p-8 md:p-10 rounded-2xl shadow-md border border-gray-100 mb-12">
+        <form onSubmit={handleSubmit} className="bg-white p-6 sm:p-8 md:p-10 rounded-2xl shadow-md border border-gray-100 mb-12">
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="text-xl font-semibold text-green-800">
+              {editingId ? 'Edit Post' : 'Create New Post'}
+            </h3>
+            {editingId && (
+              <button
+                type="button"
+                onClick={resetForm}
+                className="text-sm text-gray-500 hover:text-gray-700 font-medium"
+              >
+                Cancel edit
+              </button>
+            )}
+          </div>
+
           <div className="grid md:grid-cols-2 gap-6 md:gap-8">
             <div className="space-y-6">
               <div>
@@ -173,8 +207,15 @@ export default function BlogManagement() {
 
               <div>
                 <label htmlFor="image" className="block text-sm font-medium text-gray-700 mb-2">
-                  Featured Image
+                  Featured Image {editingId && existingImageUrl && '(leave blank to keep current image)'}
                 </label>
+                {editingId && existingImageUrl && (
+                  <img
+                    src={existingImageUrl}
+                    alt="Current featured"
+                    className="w-32 h-32 object-cover rounded-lg mb-3 border border-gray-200"
+                  />
+                )}
                 <input
                   id="image"
                   type="file"
@@ -197,22 +238,13 @@ export default function BlogManagement() {
                   : 'bg-green-700 hover:bg-green-800 hover:shadow-lg'
               }`}
             >
-              {uploading ? (
-                <span className="inline-flex items-center">
-                  <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                  </svg>
-                  Creating Post...
-                </span>
-              ) : (
-                'Create New Post'
-              )}
+              {uploading
+                ? (editingId ? 'Saving Changes...' : 'Creating Post...')
+                : (editingId ? 'Save Changes' : 'Create New Post')}
             </button>
           </div>
         </form>
 
-        {/* Existing Posts */}
         <h3 className="text-2xl md:text-3xl font-bold text-green-900 mb-8">
           Existing Posts
         </h3>
@@ -259,7 +291,13 @@ export default function BlogManagement() {
                     {post.excerpt || post.content?.substring(0, 150) + '...'}
                   </p>
 
-                  <div className="mt-auto flex justify-end">
+                  <div className="mt-auto flex justify-end gap-3">
+                    <button
+                      onClick={() => handleEditClick(post)}
+                      className="bg-green-700 hover:bg-green-800 text-white px-5 py-2 rounded-lg font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2"
+                    >
+                      Edit
+                    </button>
                     <button
                       onClick={() => handleDelete(post.id)}
                       className="bg-red-600 hover:bg-red-700 text-white px-5 py-2 rounded-lg font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2"
