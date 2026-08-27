@@ -1,4 +1,4 @@
-# Dr. Yetunde Abioye — Official Website
+# Dr. Yetunde Abioye Official Website
 
 Personal and professional website for Dr. Yetunde Abioye, Veterinary Doctor, Incident Manager for the National Lassa Fever EOC, and Lead of the One Health Coordination Unit at the Nigeria Centre for Disease Control and Prevention (NCDC).
 
