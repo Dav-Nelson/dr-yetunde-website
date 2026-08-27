@@ -10,9 +10,9 @@ export default function Footer() {
               Dr. Yetunde Abioye
             </h3>
             <p className="text-sm leading-relaxed">
-              Veterinary Doctor | Mandela Washington Fellow 2025<br />
-              Senior Veterinary Officer, NCDC | One Health Advocate
-            </p>
+  Incident Manager, National Lassa Fever EOC<br />
+  Lead, One Health Coordination Unit, NCDC
+</p>
           </div>
 
           {/* Middle - Quick Links */}
