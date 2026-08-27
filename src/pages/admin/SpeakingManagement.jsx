@@ -1,62 +1,24 @@
 import { useState, useEffect } from 'react';
-import { collection, addDoc, getDocs, deleteDoc, doc, query, orderBy } from 'firebase/firestore';
+import { collection, addDoc, updateDoc, getDocs, deleteDoc, doc, query, orderBy } from 'firebase/firestore';
 import { db } from '../../firebase';
 import { uploadToCloudinary } from '../../utils/cloudinaryUpload';
 
 export default function SpeakingManagement() {
   const [events, setEvents] = useState([]);
+  const [editingId, setEditingId] = useState(null);
   const [title, setTitle] = useState('');
   const [date, setDate] = useState('');
   const [location, setLocation] = useState('');
   const [topic, setTopic] = useState('');
   const [description, setDescription] = useState('');
   const [imageFile, setImageFile] = useState(null);
+  const [existingImageUrl, setExistingImageUrl] = useState('');
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
-  // Fetch events (sorted by date descending)
-  useEffect(() => {
-    const fetchEvents = async () => {
-      try {
-        const q = query(collection(db, 'speakingEngagements'), orderBy('date', 'desc'));
-        const querySnapshot = await getDocs(q);
-        const eventsData = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        setEvents(eventsData);
-      } catch (err) {
-        setError('Failed to load events');
-      }
-    };
-    fetchEvents();
-  }, []);
-
-  const handleCreateEvent = async (e) => {
-    e.preventDefault();
-    setUploading(true);
-    setError('');
-    setSuccess('');
-
+  const fetchEvents = async () => {
     try {
-      let imageUrl = '';
-      if (imageFile) {
-        const result = await uploadToCloudinary(imageFile);
-        imageUrl = result.url;
-      }
-
-      await addDoc(collection(db, 'speakingEngagements'), {
-        title,
-        date,
-        location,
-        topic,
-        description,
-        imageUrl,
-        createdAt: new Date().toISOString(),
-      });
-
-      // Refresh list
       const q = query(collection(db, 'speakingEngagements'), orderBy('date', 'desc'));
       const querySnapshot = await getDocs(q);
       const eventsData = querySnapshot.docs.map((doc) => ({
@@ -64,18 +26,78 @@ export default function SpeakingManagement() {
         ...doc.data(),
       }));
       setEvents(eventsData);
-
-      // Clear form
-      setTitle('');
-      setDate('');
-      setLocation('');
-      setTopic('');
-      setDescription('');
-      setImageFile(null);
-
-      setSuccess('Speaking engagement added successfully!');
     } catch (err) {
-      setError(err.message || 'Failed to create event');
+      setError('Failed to load events');
+    }
+  };
+
+  useEffect(() => {
+    fetchEvents();
+  }, []);
+
+  const resetForm = () => {
+    setEditingId(null);
+    setTitle('');
+    setDate('');
+    setLocation('');
+    setTopic('');
+    setDescription('');
+    setImageFile(null);
+    setExistingImageUrl('');
+  };
+
+  const handleEditClick = (event) => {
+    setEditingId(event.id);
+    setTitle(event.title);
+    setDate(event.date);
+    setLocation(event.location);
+    setTopic(event.topic);
+    setDescription(event.description);
+    setExistingImageUrl(event.imageUrl || '');
+    setImageFile(null);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setUploading(true);
+    setError('');
+    setSuccess('');
+
+    try {
+      let imageUrl = existingImageUrl;
+      if (imageFile) {
+        const result = await uploadToCloudinary(imageFile);
+        imageUrl = result.url;
+      }
+
+      if (editingId) {
+        await updateDoc(doc(db, 'speakingEngagements', editingId), {
+          title,
+          date,
+          location,
+          topic,
+          description,
+          imageUrl,
+        });
+        setSuccess('Speaking engagement updated successfully!');
+      } else {
+        await addDoc(collection(db, 'speakingEngagements'), {
+          title,
+          date,
+          location,
+          topic,
+          description,
+          imageUrl,
+          createdAt: new Date().toISOString(),
+        });
+        setSuccess('Speaking engagement added successfully!');
+      }
+
+      await fetchEvents();
+      resetForm();
+    } catch (err) {
+      setError(err.message || 'Failed to save event');
     } finally {
       setUploading(false);
     }
@@ -88,6 +110,7 @@ export default function SpeakingManagement() {
       await deleteDoc(doc(db, 'speakingEngagements', eventId));
       setEvents(events.filter((e) => e.id !== eventId));
       setSuccess('Event deleted successfully');
+      if (editingId === eventId) resetForm();
     } catch (err) {
       setError('Failed to delete event');
     }
@@ -100,7 +123,6 @@ export default function SpeakingManagement() {
           Manage Speaking Engagements
         </h2>
 
-        {/* Success / Error Messages */}
         {success && (
           <div className="mb-8 p-4 bg-green-100 border border-green-300 text-green-800 rounded-xl shadow-sm">
             {success}
@@ -112,8 +134,22 @@ export default function SpeakingManagement() {
           </div>
         )}
 
-        {/* Create Event Form */}
-        <form onSubmit={handleCreateEvent} className="bg-white p-6 sm:p-8 md:p-10 rounded-2xl shadow-md border border-gray-100 mb-12">
+        <form onSubmit={handleSubmit} className="bg-white p-6 sm:p-8 md:p-10 rounded-2xl shadow-md border border-gray-100 mb-12">
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="text-xl font-semibold text-green-800">
+              {editingId ? 'Edit Speaking Engagement' : 'Add New Event'}
+            </h3>
+            {editingId && (
+              <button
+                type="button"
+                onClick={resetForm}
+                className="text-sm text-gray-500 hover:text-gray-700 font-medium"
+              >
+                Cancel edit
+              </button>
+            )}
+          </div>
+
           <div className="grid md:grid-cols-2 gap-6 md:gap-8">
             <div className="space-y-6">
               <div>
@@ -190,8 +226,15 @@ export default function SpeakingManagement() {
 
               <div>
                 <label htmlFor="image" className="block text-sm font-medium text-gray-700 mb-2">
-                  Event Photo
+                  Event Photo {editingId && existingImageUrl && '(leave blank to keep current image)'}
                 </label>
+                {editingId && existingImageUrl && (
+                  <img
+                    src={existingImageUrl}
+                    alt="Current event"
+                    className="w-32 h-32 object-cover rounded-lg mb-3 border border-gray-200"
+                  />
+                )}
                 <input
                   id="image"
                   type="file"
@@ -214,22 +257,13 @@ export default function SpeakingManagement() {
                   : 'bg-green-700 hover:bg-green-800 hover:shadow-lg'
               }`}
             >
-              {uploading ? (
-                <span className="inline-flex items-center">
-                  <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                  </svg>
-                  Adding Event...
-                </span>
-              ) : (
-                'Add New Event'
-              )}
+              {uploading
+                ? (editingId ? 'Saving Changes...' : 'Adding Event...')
+                : (editingId ? 'Save Changes' : 'Add New Event')}
             </button>
           </div>
         </form>
 
-        {/* Existing Events */}
         <h3 className="text-2xl md:text-3xl font-bold text-green-900 mb-8">
           Existing Events
         </h3>
@@ -281,7 +315,13 @@ export default function SpeakingManagement() {
                     {event.description}
                   </p>
 
-                  <div className="mt-auto flex justify-end">
+                  <div className="mt-auto flex justify-end gap-3">
+                    <button
+                      onClick={() => handleEditClick(event)}
+                      className="bg-green-700 hover:bg-green-800 text-white px-5 py-2 rounded-lg font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2"
+                    >
+                      Edit
+                    </button>
                     <button
                       onClick={() => handleDelete(event.id)}
                       className="bg-red-600 hover:bg-red-700 text-white px-5 py-2 rounded-lg font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2"
@@ -297,4 +337,4 @@ export default function SpeakingManagement() {
       </div>
     </div>
   );
-}
+               }
