@@ -11,11 +11,11 @@ export default function Home() {
         </h1>
 
         <p className="text-lg sm:text-xl md:text-2xl text-green-800 font-medium mb-4">
-          Veterinary Doctor | One Health Advocate | Public Health Leader
+          Veterinary Doctor | One Health Leader | Public Health Specialist
         </p>
 
         <p className="text-base sm:text-lg md:text-xl text-gray-700 max-w-4xl mx-auto mb-12">
-          Senior Veterinary Officer at NCDC • Mandela Washington Fellow 2025 • National Lassa Fever Incident Manager
+          Incident Manager, National Lassa Fever EOC • Lead, One Health Coordination Unit, NCDC • Mandela Washington Fellow 2025
         </p>
 
         {/* Photo & Tagline Card */}
@@ -42,24 +42,13 @@ export default function Home() {
 
         {/* Call-to-Action Buttons */}
         <div className="flex flex-col sm:flex-row gap-5 md:gap-8 justify-center mt-12 md:mt-16">
-          <Link
-            to="/contact"
-            className="inline-flex items-center justify-center px-10 py-4 bg-green-700 text-white text-lg font-semibold rounded-lg shadow-md hover:bg-green-800 hover:shadow-lg transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-green-300"
-          >
+          <Link to="/contact" className="inline-flex items-center justify-center px-10 py-4 bg-green-700 text-white text-lg font-semibold rounded-lg shadow-md hover:bg-green-800 hover:shadow-lg transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-green-300">
             Contact & Bookings
           </Link>
-
-          <Link
-            to="/speaking"
-            className="inline-flex items-center justify-center px-10 py-4 bg-white text-green-800 text-lg font-semibold rounded-lg border-2 border-green-800 hover:bg-green-50 hover:shadow-md transition-all duration-300"
-          >
+          <Link to="/speaking" className="inline-flex items-center justify-center px-10 py-4 bg-white text-green-800 text-lg font-semibold rounded-lg border-2 border-green-800 hover:bg-green-50 hover:shadow-md transition-all duration-300">
             View Speaking Engagements
           </Link>
-
-          <Link
-            to="/blog"
-            className="inline-flex items-center justify-center px-10 py-4 bg-white text-green-800 text-lg font-semibold rounded-lg border-2 border-green-800 hover:bg-green-50 hover:shadow-md transition-all duration-300"
-          >
+          <Link to="/blog" className="inline-flex items-center justify-center px-10 py-4 bg-white text-green-800 text-lg font-semibold rounded-lg border-2 border-green-800 hover:bg-green-50 hover:shadow-md transition-all duration-300">
             Read Insights & Blog
           </Link>
         </div>
