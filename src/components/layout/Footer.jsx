@@ -10,7 +10,7 @@ export default function Footer() {
               Dr. Yetunde Abioye
             </h3>
             <p className="text-sm leading-relaxed">
-              Incident Manager, National Lassa Fever EOC<br />
+              Lead, National Lassa Fever TWG<br />
               Lead, One Health Coordination Unit, NCDC
             </p>
           </div>
