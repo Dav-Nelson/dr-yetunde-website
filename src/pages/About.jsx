@@ -7,16 +7,16 @@ export default function About() {
         {/* Hero / Intro - Side-by-side layout */}
         <div className="flex flex-col md:flex-row items-center gap-10 md:gap-14 mb-16 md:mb-24">
           {/* Photo */}
-          <div className="w-full md:w-2/5 flex-shrink-0">
-            <div className="relative rounded-2xl overflow-hidden shadow-2xl aspect-[4/5] max-w-sm mx-auto md:max-w-none">
-              <img
-                src={dyAbout}
-                alt="Dr. Yetunde Abioye - Professional portrait"
-                className="w-full h-full object-top"
-                loading="lazy"
-              />
-            </div>
-          </div>
+<div className="w-full md:w-2/5 flex-shrink-0">
+  <div className="relative rounded-2xl overflow-hidden shadow-2xl aspect-[3/4] max-w-sm mx-auto md:max-w-none">
+    <img
+      src={dyAbout}
+      alt="Dr. Yetunde Abioye conducting fieldwork"
+      className="w-full h-full object-cover object-top"
+      loading="lazy"
+    />
+  </div>
+</div>
 
           {/* Intro Text */}
           <div className="w-full md:w-3/5 text-center md:text-left">
