@@ -1,4 +1,4 @@
-import dyImage from '../assets/dy.jpg';
+import dyAbout from '../assets/dy-about.jpg';
 
 export default function About() {
   return (
@@ -10,9 +10,9 @@ export default function About() {
           <div className="w-full md:w-2/5 flex-shrink-0">
             <div className="relative rounded-2xl overflow-hidden shadow-2xl aspect-[4/5] max-w-sm mx-auto md:max-w-none">
               <img
-                src={dyImage}
+                src={dyAbout}
                 alt="Dr. Yetunde Abioye - Professional portrait"
-                className="w-full h-full object-cover"
+                className="w-full h-full object-top"
                 loading="lazy"
               />
             </div>
