@@ -27,7 +27,7 @@ export default function About() {
               Veterinary Doctor | One Health Leader | Public Health Specialist
             </p>
             <p className="text-lg md:text-xl text-gray-700">
-              Incident Manager, National Lassa Fever EOC • Lead, One Health Coordination Unit, NCDC • Mandela Washington Fellow 2025
+              Lead, National Lassa Fever TWG • Lead, One Health Coordination Unit, NCDC • Mandela Washington Fellow 2025
             </p>
           </div>
         </div>
@@ -39,7 +39,7 @@ export default function About() {
           </h2>
           <div className="prose prose-lg max-w-none text-gray-800 leading-relaxed space-y-6">
             <p>
-              Dr. Yetunde Abioye is the <strong>Incident Manager</strong> for the National Lassa Fever Emergency Operations Centre (EOC) and <strong>Lead</strong> of the One Health Coordination Unit at the Nigeria Centre for Disease Control and Prevention (NCDC).
+              Dr. Yetunde Abioye is the <strong>Lead</strong> for the National Lassa Fever Technical Working Group (TWG) and <strong>Lead</strong> of the One Health Coordination Unit at the Nigeria Centre for Disease Control and Prevention (NCDC).
             </p>
             <p>
               Her professional journey spans progressive experience across clinical practice, surveillance and epidemiology, zoonotic diseases, antimicrobial resistance, food safety, food security, public health, health security, and One Health initiatives, policy, and multisectoral partnerships.
