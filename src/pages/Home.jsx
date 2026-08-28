@@ -15,7 +15,7 @@ export default function Home() {
         </p>
 
         <p className="text-base sm:text-lg md:text-xl text-gray-700 max-w-4xl mx-auto mb-12">
-          Incident Manager, National Lassa Fever EOC • Lead, One Health Coordination Unit, NCDC • Mandela Washington Fellow 2025
+          Lead, National Lassa Fever TWG • Lead, One Health Coordination Unit, NCDC • Mandela Washington Fellow 2025
         </p>
 
         {/* Photo & Tagline Card */}
